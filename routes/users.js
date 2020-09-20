@@ -9,15 +9,13 @@ router.use(bodyParser.json());
 
 /* GET users listing. */
 router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-  User.find({}, (err, users) => {
-    if (err) {
-      return next(err);
-    } else {
-      res.statusCode = 200;
-      res.setHeader('Content_type', 'application/json');
-      res.json(users);
-    }
-  })
+  User.find({})
+    .then((users) => {
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json')
+        res.json(users)
+    }, (err) => next(err))
+    .catch((err) => next(err))
 });
 
 router.post('/signup', (req, res, next) => {
